@@ -1,18 +1,36 @@
+import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
+import db from "../lib/database";
 import "../App.css";
 
 function Home() {
   const { user, logout, loading } = useAuth();
   const navigate = useNavigate();
-
-  console.log("Home - loading:", loading, "user:", user);
+  const [dbStatus, setDbStatus] = useState(null);
+  const [dbLoading, setDbLoading] = useState(false);
 
   const handleLogout = async () => {
     const result = await logout();
     if (result.success) {
       navigate("/login");
     }
+  };
+
+  const testDatabaseConnection = async () => {
+    setDbLoading(true);
+    setDbStatus(null);
+    
+    // First test the connection
+    const userId = "greatppr";
+    const result = await db.testConnection(userId);
+    setDbStatus(result);
+    
+    // Also get the accounts table schema
+    const schemaResult = await db.getCollectionSchema('accounts');
+    console.log('Accounts table schema:', schemaResult);
+    
+    setDbLoading(false);
   };
 
   // Show loading while checking authentication
@@ -29,7 +47,6 @@ function Home() {
 
   // Redirect to login if not authenticated
   if (!user) {
-    console.log("No user, redirecting to login");
     navigate("/login");
     return null;
   }
@@ -43,15 +60,23 @@ function Home() {
             <div className="flex items-center gap-3">
               <img src="/appwrite.svg" alt="Appwrite" className="w-8 h-8" />
               <span className="text-xl font-bold text-gray-900">
-                My App
+                The Royal Ledger
               </span>
             </div>
-            <button
-              onClick={handleLogout}
-              className="px-4 py-2 bg-pink-500 text-white rounded-lg font-medium hover:bg-pink-600 transition"
-            >
-              Logout
-            </button>
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => navigate("/accounts")}
+                className="px-4 py-2 text-gray-700 hover:text-gray-900 font-medium transition"
+              >
+                Accounts
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-4 py-2 bg-pink-500 text-white rounded-lg font-medium hover:bg-pink-600 transition"
+              >
+                Logout
+              </button>
+            </div>
           </div>
         </div>
       </nav>
@@ -121,87 +146,76 @@ function Home() {
             </div>
           </div>
 
-          {/* Actions */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-pink-50 to-purple-50 rounded-lg p-6 border border-pink-100">
-              <div className="text-pink-500 mb-3">
-                <svg
-                  className="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Profile</h3>
-              <p className="text-sm text-gray-600">
-                Manage your account settings
+          {/* Database Connection Test */}
+          <div className="bg-blue-50 rounded-xl p-6 mb-6 border border-blue-200">
+            <h2 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <svg className="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+              </svg>
+              Database Connection
+            </h2>
+            
+            <div className="mb-4">
+              <p className="text-gray-700 mb-2">
+                <strong>Database:</strong> expensetracker_db
+              </p>
+              <p className="text-gray-600 text-sm font-mono">
+                ID: 698169f0003a699bc147
               </p>
             </div>
 
-            <div className="bg-gradient-to-br from-blue-50 to-indigo-50 rounded-lg p-6 border border-blue-100">
-              <div className="text-blue-500 mb-3">
-                <svg
-                  className="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
-                  />
-                </svg>
-              </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Documents</h3>
-              <p className="text-sm text-gray-600">
-                Access your saved documents
-              </p>
-            </div>
+            <button
+              onClick={testDatabaseConnection}
+              disabled={dbLoading}
+              className="px-4 py-2 bg-blue-500 text-white rounded-lg font-medium hover:bg-blue-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {dbLoading ? "Testing..." : "Test Database Connection"}
+            </button>
 
-            <div className="bg-gradient-to-br from-green-50 to-emerald-50 rounded-lg p-6 border border-green-100">
-              <div className="text-green-500 mb-3">
-                <svg
-                  className="w-8 h-8"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-                  />
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                  />
-                </svg>
+            {dbStatus && (
+              <div className={`mt-4 p-4 rounded-lg ${dbStatus.success ? "bg-green-100 border border-green-300" : "bg-red-100 border border-red-300"}`}>
+                {dbStatus.success ? (
+                  <>
+                    <p className="text-green-800 font-semibold mb-2">✅ Connection Successful!</p>
+                    <p className="text-green-700 text-sm mb-2">
+                      {dbStatus.message}
+                    </p>
+                    {dbStatus.userData && (
+                      <div className="mt-3 bg-white rounded p-3 border border-green-200">
+                        <p className="text-green-800 font-medium mb-2">User Data from Database:</p>
+                        <div className="space-y-1 text-sm">
+                          {Object.entries(dbStatus.userData).map(([key, value]) => {
+                            if (key.startsWith('$')) return null; // Skip Appwrite internal fields
+                            return (
+                              <div key={key} className="flex justify-between py-1 border-b border-gray-100">
+                                <span className="text-gray-600 font-medium">{key}:</span>
+                                <span className="text-gray-900 font-mono text-xs">
+                                  {typeof value === 'object' ? JSON.stringify(value) : String(value)}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    )}
+                    {dbStatus.allUsers !== undefined && !dbStatus.userData && (
+                      <p className="text-yellow-700 text-sm mt-2">
+                        Found {dbStatus.allUsers} total users, but "greatppr" not found
+                      </p>
+                    )}
+                    <p className="text-green-600 text-xs mt-2 font-mono">
+                      Database ID: {dbStatus.databaseId}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-red-800 font-semibold mb-2">❌ Connection Failed</p>
+                    <p className="text-red-700 text-sm">{dbStatus.error}</p>
+                  </>
+                )}
               </div>
-              <h3 className="font-semibold text-gray-900 mb-1">Settings</h3>
-              <p className="text-sm text-gray-600">
-                Configure your preferences
-              </p>
-            </div>
+            )}
           </div>
-        </div>
-
-        {/* Footer Info */}
-        <div className="mt-8 text-center">
-          <p className="text-gray-500 text-sm">
-            Protected route - Only accessible when authenticated
-          </p>
         </div>
       </main>
     </div>
