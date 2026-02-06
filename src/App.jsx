@@ -4,6 +4,7 @@ import Layout from "./components/Layout";
 import Login from "./pages/Login";
 import Home from "./pages/Home";
 import Configuration from "./pages/Configuration";
+import Investments from "./pages/Investments";
 import Settings from "./pages/Settings";
 import Help from "./pages/Help";
 import "./App.css";
@@ -17,6 +18,7 @@ function App() {
           <Route element={<Layout />}>
             <Route path="/home" element={<Home />} />
             <Route path="/configuration" element={<Configuration />} />
+            <Route path="/investments" element={<Investments />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/help" element={<Help />} />
           </Route>

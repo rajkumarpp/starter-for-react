@@ -10,9 +10,9 @@ function Help() {
                         Welcome to The Royal Ledger. Use the Navigation bar to access different sections of the application.
                     </p>
                     <ul className="list-disc pl-5 space-y-2 mb-6">
-                        <li><strong>Home:</strong> View your dashboard and expense summaries.</li>
-                        <li><strong>Configuration:</strong> Manage your accounts and financial setup.</li>
-                        <li><strong>Settings:</strong> Update your profile and application preferences.</li>
+                        <li><strong className="text-gray-900">Home:</strong> View your dashboard and expense summaries.</li>
+                        <li><strong className="text-gray-900">Configuration:</strong> Manage your accounts and financial setup.</li>
+                        <li><strong className="text-gray-900">Settings:</strong> Update your profile and application preferences.</li>
                     </ul>
 
                     <h2 className="text-xl font-bold text-gray-900 mb-4">Need Assistance?</h2>

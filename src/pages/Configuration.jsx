@@ -21,7 +21,7 @@ function Configuration() {
 
             {/* Placeholders for future sections */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 opacity-50 pointer-events-none">
-                <div className="bg-white p-6 rounded-2xl border border-gray-100">
+                <div className="bg-white p-6 rounded-2xl border border-gray-100 transition-colors">
                     <h3 className="font-semibold text-gray-900">Payment Methods (Coming Soon)</h3>
                 </div>
             </div>

@@ -30,10 +30,13 @@ function Categories() {
     const loadUserAndCategories = async () => {
         setLoading(true);
 
-        // Get user document ID
-        const username = "greatppr"; // Using the same hardcoded user as Accounts for consistency until dynamic user handling is improved
+        if (!user) {
+            setLoading(false);
+            return;
+        }
 
-        const userResult = await db.getUserDocumentId(username);
+        // Get user document ID
+        const userResult = await db.getUserDocumentId(user.$id);
 
         if (userResult.success) {
             setUserDocId(userResult.documentId);
@@ -177,7 +180,7 @@ function Categories() {
 
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg font-medium hover:bg-pink-100 transition"
+                    className="flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg font-medium hover:bg-pink-100:bg-pink-900/30 transition"
                 >
                     {showForm ? (
                         <span>Cancel</span>
@@ -194,7 +197,7 @@ function Categories() {
 
             {/* Category Form */}
             {showForm && (
-                <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-8">
+                <div className="bg-white rounded-2xl shadow-xl p-8 border border-gray-100 mb-8 transition-colors">
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">
                         {editingCategory ? "Edit Category" : "Add New Category"}
                     </h2>
@@ -211,7 +214,7 @@ function Categories() {
                                 value={formData.name}
                                 onChange={handleInputChange}
                                 placeholder="e.g., Groceries, Rent, Salary"
-                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition ${formErrors.name ? "border-red-500" : "border-gray-300"
+                                className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white text-gray-900 ${formErrors.name ? "border-red-500" : "border-gray-300"
                                     }`}
                             />
                             {formErrors.name && (
@@ -228,10 +231,10 @@ function Categories() {
                                 name="type"
                                 value={formData.type}
                                 onChange={handleInputChange}
-                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white"
+                                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white text-gray-900"
                             >
-                                <option value="Expense">Expense</option>
-                                <option value="Income">Income</option>
+                                <option value="Expense" className="dark:bg-gray-700">Expense</option>
+                                <option value="Income" className="dark:bg-gray-700">Income</option>
                             </select>
                         </div>
 
@@ -246,7 +249,7 @@ function Categories() {
                             <button
                                 type="button"
                                 onClick={handleCancel}
-                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition"
+                                className="px-6 py-3 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300:bg-gray-500 transition"
                             >
                                 Cancel
                             </button>
@@ -256,7 +259,7 @@ function Categories() {
             )}
 
             {/* Categories List */}
-            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
+            <div className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden transition-colors">
                 <div className="p-6 border-b border-gray-100">
                     <h2 className="text-xl font-bold text-gray-900">Your Categories</h2>
                     <p className="text-gray-600 text-sm mt-1">Total: {categories.length} categories</p>
@@ -279,7 +282,7 @@ function Categories() {
                             </thead>
                             <tbody className="bg-white divide-y divide-gray-200">
                                 {categories.map((category) => (
-                                    <tr key={category.$id} className="hover:bg-gray-50">
+                                    <tr key={category.$id} className="hover:bg-gray-50:bg-gray-700/50 transition-colors">
                                         <td className="px-6 py-4 whitespace-nowrap">
                                             <div className="text-sm font-medium text-gray-900">{category.name}</div>
                                         </td>
@@ -294,13 +297,13 @@ function Categories() {
                                         <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                             <button
                                                 onClick={() => handleEdit(category)}
-                                                className="text-pink-600 hover:text-pink-900 mr-4"
+                                                className="text-pink-600 hover:text-pink-900:text-pink-300 mr-4"
                                             >
                                                 Edit
                                             </button>
                                             <button
                                                 onClick={() => handleDelete(category.$id)}
-                                                className="text-red-600 hover:text-red-900"
+                                                className="text-red-600 hover:text-red-900:text-red-300"
                                             >
                                                 Delete
                                             </button>

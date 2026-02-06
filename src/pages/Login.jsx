@@ -90,7 +90,7 @@ function Login() {
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   required={!isLogin}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white text-gray-900"
                   placeholder="John Doe"
                 />
               </div>
@@ -109,7 +109,7 @@ function Login() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white text-gray-900"
                 placeholder="you@example.com"
               />
             </div>
@@ -128,7 +128,7 @@ function Login() {
                 onChange={(e) => setPassword(e.target.value)}
                 required
                 minLength={8}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 focus:border-transparent outline-none transition bg-white text-gray-900"
                 placeholder="••••••••"
               />
             </div>
@@ -136,13 +136,13 @@ function Login() {
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-pink-500 text-white py-3 rounded-lg font-semibold hover:bg-pink-600 transition disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full bg-pink-500 hover:bg-pink-600 text-white py-3 rounded-lg font-semibold transition disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {submitting
                 ? "Processing..."
                 : isLogin
-                ? "Sign In"
-                : "Create Account"}
+                  ? "Sign In"
+                  : "Create Account"}
             </button>
           </form>
 
@@ -156,7 +156,7 @@ function Login() {
                 setIsLogin(!isLogin);
                 setError("");
               }}
-              className="text-pink-500 hover:text-pink-600 font-medium text-sm"
+              className="text-pink-500 hover:text-pink-600:text-pink-300 font-medium text-sm"
             >
               {isLogin
                 ? "Don't have an account? Sign up"
@@ -172,7 +172,7 @@ function Login() {
             href="https://appwrite.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="text-pink-500 hover:text-pink-600"
+            className="text-pink-500 hover:text-pink-600:text-pink-300"
           >
             Appwrite Cloud
           </a>

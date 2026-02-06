@@ -35,6 +35,9 @@ function Header() {
                         <Link to="/configuration" className={`${isActive("/configuration")} transition-colors`}>
                             Configuration
                         </Link>
+                        <Link to="/investments" className={`${isActive("/investments")} transition-colors`}>
+                            Investments
+                        </Link>
                         <Link to="/settings" className={`${isActive("/settings")} transition-colors`}>
                             Settings
                         </Link>
@@ -54,7 +57,7 @@ function Header() {
 
                         <button
                             onClick={handleLogout}
-                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-lg text-sm font-medium transition duration-200 ease-in-out flex items-center gap-2"
+                            className="px-4 py-2 bg-gray-100 hover:bg-gray-200:bg-gray-600 text-gray-700 rounded-lg text-sm font-medium transition duration-200 ease-in-out flex items-center gap-2"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 01-3-3h4a3 3 0 01 3 3v1" />

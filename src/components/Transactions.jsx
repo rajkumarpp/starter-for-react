@@ -35,12 +35,13 @@ function Transactions() {
     const loadData = async () => {
         setLoading(true);
 
-        // 1. Get User Doc ID
-        // Using hardcoded username for consistency with previous components
-        // In a real scenario, this would come from the auth context or a user hook
-        const username = "greatppr";
+        if (!user) {
+            setLoading(false);
+            return;
+        }
 
-        const userResult = await db.getUserDocumentId(username);
+        // 1. Get User Doc ID
+        const userResult = await db.getUserDocumentId(user.$id);
 
         if (!userResult.success) {
             console.error('Failed to get user document ID:', userResult.error);
@@ -305,7 +306,7 @@ function Transactions() {
                 </div>
                 <button
                     onClick={() => setShowForm(!showForm)}
-                    className="flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg font-medium hover:bg-pink-100 transition"
+                    className="flex items-center gap-2 px-4 py-2 bg-pink-50 text-pink-600 rounded-lg font-medium hover:bg-pink-100:bg-pink-900/30 transition"
                 >
                     {showForm ? (
                         <span>Cancel</span>
@@ -323,7 +324,7 @@ function Transactions() {
             {/* Monthly Summary Cards */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 {/* Income */}
-                <div className="bg-green-50 rounded-2xl p-6 border border-green-100">
+                <div className="bg-green-50 rounded-2xl p-6 border border-green-100 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-gray-500 font-medium">Total Income</h3>
                         <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-green-600">
@@ -336,7 +337,7 @@ function Transactions() {
                 </div>
 
                 {/* Expense */}
-                <div className="bg-red-50 rounded-2xl p-6 border border-red-100">
+                <div className="bg-red-50 rounded-2xl p-6 border border-red-100 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-gray-500 font-medium">Total Expense</h3>
                         <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-red-600">
@@ -349,7 +350,7 @@ function Transactions() {
                 </div>
 
                 {/* Investment */}
-                <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100">
+                <div className="bg-purple-50 rounded-2xl p-6 border border-purple-100 transition-colors">
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="text-gray-500 font-medium">Total Investment</h3>
                         <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-purple-600">
@@ -364,7 +365,7 @@ function Transactions() {
 
             {/* Add Transaction Form */}
             {showForm && (
-                <div className="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200">
+                <div className="bg-gray-50 rounded-xl p-6 mb-8 border border-gray-200 transition-colors">
                     <h3 className="text-lg font-bold text-gray-900 mb-4">New Transaction</h3>
                     <form onSubmit={handleSubmit} className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
@@ -376,7 +377,7 @@ function Transactions() {
                                 name="transactionDate"
                                 value={formData.transactionDate}
                                 onChange={handleInputChange}
-                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none ${formErrors.transactionDate ? "border-red-500" : "border-gray-300"}`}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white text-gray-900 ${formErrors.transactionDate ? "border-red-500" : "border-gray-300"}`}
                             />
                         </div>
 
@@ -390,7 +391,7 @@ function Transactions() {
                                 onChange={handleInputChange}
                                 step="0.01"
                                 placeholder="0.00"
-                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none ${formErrors.amount ? "border-red-500" : "border-gray-300"}`}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white text-gray-900 ${formErrors.amount ? "border-red-500" : "border-gray-300"}`}
                             />
                         </div>
 
@@ -401,11 +402,11 @@ function Transactions() {
                                 name="categoryId"
                                 value={formData.categoryId}
                                 onChange={handleInputChange}
-                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white ${formErrors.categoryId ? "border-red-500" : "border-gray-300"}`}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white text-gray-900 ${formErrors.categoryId ? "border-red-500" : "border-gray-300"}`}
                             >
-                                <option value="">Select Category</option>
+                                <option value="" className="dark:bg-gray-700">Select Category</option>
                                 {categories.map(cat => (
-                                    <option key={cat.$id} value={cat.$id}>
+                                    <option key={cat.$id} value={cat.$id} className="dark:bg-gray-700">
                                         {cat.name} ({cat.type})
                                     </option>
                                 ))}
@@ -419,11 +420,11 @@ function Transactions() {
                                 name="accountId"
                                 value={formData.accountId}
                                 onChange={handleInputChange}
-                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white ${formErrors.accountId ? "border-red-500" : "border-gray-300"}`}
+                                className={`w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white text-gray-900 ${formErrors.accountId ? "border-red-500" : "border-gray-300"}`}
                             >
-                                <option value="">Select Account</option>
+                                <option value="" className="dark:bg-gray-700">Select Account</option>
                                 {accounts.map(acc => (
-                                    <option key={acc.$id} value={acc.$id}>
+                                    <option key={acc.$id} value={acc.$id} className="dark:bg-gray-700">
                                         {acc.name} (₹{acc.balance})
                                     </option>
                                 ))}
@@ -439,7 +440,7 @@ function Transactions() {
                                 value={formData.description}
                                 onChange={handleInputChange}
                                 placeholder="e.g., Grocery shopping at Walmart"
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 outline-none"
+                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-pink-500 outline-none bg-white text-gray-900"
                             />
                         </div>
 
@@ -448,7 +449,7 @@ function Transactions() {
                             <button
                                 type="button"
                                 onClick={() => setShowForm(false)}
-                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300 transition text-sm"
+                                className="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium hover:bg-gray-300:bg-gray-500 transition text-sm"
                             >
                                 Cancel
                             </button>
@@ -497,7 +498,7 @@ function Transactions() {
                                 const isExpense = category?.type === 'Expense';
 
                                 return (
-                                    <tr key={t.$id} className="hover:bg-gray-50 transition-colors">
+                                    <tr key={t.$id} className="hover:bg-gray-50:bg-gray-700/50 transition-colors">
                                         <td className="px-4 py-3 text-sm text-gray-600">
                                             {new Date(t.transactionDate).toLocaleDateString()}
                                             <span className="text-xs text-gray-400 block">
@@ -521,7 +522,7 @@ function Transactions() {
                                         <td className="px-4 py-3 text-center">
                                             <button
                                                 onClick={() => handleDelete(t)}
-                                                className="text-gray-400 hover:text-red-500 transition"
+                                                className="text-gray-400 hover:text-red-500:text-red-400 transition"
                                                 title="Delete"
                                             >
                                                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
